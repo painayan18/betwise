@@ -15,7 +15,7 @@ export function TabNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 bg-gray-900 border-t border-gray-700 sm:static sm:border-t-0 sm:border-b sm:border-gray-700">
-      <div className="max-w-lg mx-auto flex">
+      <div className="max-w-4xl mx-auto flex">
         {tabs.map(({ href, label, icon: Icon }) => {
           const active = pathname.startsWith(href);
           return (
