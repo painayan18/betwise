@@ -30,8 +30,12 @@ export async function initSchema(): Promise<void> {
       total_winnings DECIMAL(10,2) DEFAULT 0,
       notes TEXT,
       created_at TIMESTAMP DEFAULT NOW(),
-      settled_at TIMESTAMP
+      settled_at TIMESTAMP,
+      placed_at DATE DEFAULT CURRENT_DATE
     )
+  `;
+  await sql`
+    ALTER TABLE bets ADD COLUMN IF NOT EXISTS placed_at DATE DEFAULT CURRENT_DATE
   `;
   await sql`
     CREATE TABLE IF NOT EXISTS bet_participants (

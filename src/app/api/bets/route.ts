@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
       placed_by: typeof body.placed_by === 'string' && body.placed_by.trim() ? body.placed_by.trim() : null,
       total_cost,
       notes: typeof body.notes === 'string' && body.notes.trim() ? body.notes.trim() : null,
+      placed_at: typeof body.placed_at === 'string' && body.placed_at ? body.placed_at : null,
       participant_ids,
     };
 

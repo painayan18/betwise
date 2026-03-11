@@ -22,7 +22,12 @@ export function BetCard({ bet, onSettle, onDelete, onUpdate }: BetCardProps) {
   const [editing, setEditing] = useState(false);
   const [description, setDescription] = useState(bet.description);
   const [notes, setNotes] = useState(bet.notes ?? '');
+  const [placedAt, setPlacedAt] = useState(bet.placed_at ?? '');
   const [saving, setSaving] = useState(false);
+
+  function formatDate(d: string) {
+    return new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
 
   const count = bet.participants.length;
   const perPerson = count > 0 ? bet.total_cost / count : bet.total_cost;
@@ -38,6 +43,7 @@ export function BetCard({ bet, onSettle, onDelete, onUpdate }: BetCardProps) {
       body: JSON.stringify({
         description: description.trim(),
         notes: notes.trim() || null,
+        placed_at: placedAt || null,
       }),
     });
     setSaving(false);
@@ -48,6 +54,7 @@ export function BetCard({ bet, onSettle, onDelete, onUpdate }: BetCardProps) {
   function handleCancel() {
     setDescription(bet.description);
     setNotes(bet.notes ?? '');
+    setPlacedAt(bet.placed_at ?? '');
     setEditing(false);
   }
 
@@ -59,7 +66,12 @@ export function BetCard({ bet, onSettle, onDelete, onUpdate }: BetCardProps) {
       >
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <p className="font-semibold text-gray-100 truncate">{bet.description}</p>
+            <p className="font-semibold text-gray-100">
+              {bet.description}
+              {bet.placed_at && (
+                <span className="font-normal text-gray-400 text-sm ml-1">— placed on {formatDate(bet.placed_at)}</span>
+              )}
+            </p>
             <StatusBadge status={bet.status} />
           </div>
           {bet.placed_by && (
@@ -109,6 +121,12 @@ export function BetCard({ bet, onSettle, onDelete, onUpdate }: BetCardProps) {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Notes (optional)"
+              />
+              <input
+                type="date"
+                className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
+                value={placedAt}
+                onChange={(e) => setPlacedAt(e.target.value)}
               />
               <div className="flex gap-2 pt-1">
                 <Button size="sm" onClick={handleSave} disabled={saving || !description.trim()}>

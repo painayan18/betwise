@@ -14,6 +14,7 @@ export interface Bet {
   status: BetStatus;
   total_winnings: number;
   notes: string | null;
+  placed_at: string | null;
   created_at: string;
   settled_at: string | null;
   participants: Member[];
@@ -42,6 +43,7 @@ export interface CreateBetRequest {
   placed_by: string | null;
   total_cost: number;
   notes: string | null;
+  placed_at: string | null;
   participant_ids: number[];
 }
 

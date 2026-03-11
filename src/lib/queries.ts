@@ -40,6 +40,7 @@ export async function getAllBets(): Promise<Bet[]> {
       b.notes,
       b.created_at::text,
       b.settled_at::text,
+      b.placed_at::text,
       COALESCE(
         json_agg(
           json_build_object('id', m.id, 'name', m.name, 'created_at', m.created_at::text)
@@ -68,6 +69,7 @@ export async function getBetById(id: number): Promise<Bet | null> {
       b.notes,
       b.created_at::text,
       b.settled_at::text,
+      b.placed_at::text,
       COALESCE(
         json_agg(
           json_build_object('id', m.id, 'name', m.name, 'created_at', m.created_at::text)
@@ -86,8 +88,8 @@ export async function getBetById(id: number): Promise<Bet | null> {
 export async function createBet(data: CreateBetRequest): Promise<Bet> {
   const sql = getDb();
   const betRows = await sql`
-    INSERT INTO bets (description, placed_by, total_cost, notes)
-    VALUES (${data.description}, ${data.placed_by}, ${data.total_cost}, ${data.notes})
+    INSERT INTO bets (description, placed_by, total_cost, notes, placed_at)
+    VALUES (${data.description}, ${data.placed_by}, ${data.total_cost}, ${data.notes}, ${data.placed_at ?? null})
     RETURNING id
   `;
   const betId = betRows[0].id as number;
@@ -103,7 +105,7 @@ export async function createBet(data: CreateBetRequest): Promise<Bet> {
 
 export async function updateBet(
   id: number,
-  data: Partial<{ description: string; placed_by: string | null; notes: string | null }>
+  data: Partial<{ description: string; placed_by: string | null; notes: string | null; placed_at: string | null }>
 ): Promise<Bet> {
   const sql = getDb();
   if (data.description !== undefined) {
@@ -114,6 +116,9 @@ export async function updateBet(
   }
   if ('notes' in data) {
     await sql`UPDATE bets SET notes = ${data.notes ?? null} WHERE id = ${id}`;
+  }
+  if ('placed_at' in data) {
+    await sql`UPDATE bets SET placed_at = ${data.placed_at ?? null} WHERE id = ${id}`;
   }
   return getBetById(id) as Promise<Bet>;
 }

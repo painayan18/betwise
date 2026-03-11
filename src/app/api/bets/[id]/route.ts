@@ -35,6 +35,7 @@ export async function PATCH(
         description: body.description,
         placed_by: body.placed_by,
         notes: body.notes,
+        placed_at: body.placed_at,
       });
     }
 

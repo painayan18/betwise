@@ -16,6 +16,8 @@ export function BetForm({ members, onClose, onSuccess }: BetFormProps) {
   const [placedBy, setPlacedBy] = useState('');
   const [totalCost, setTotalCost] = useState('');
   const [notes, setNotes] = useState('');
+  const today = new Date().toISOString().split('T')[0];
+  const [placedAt, setPlacedAt] = useState(today);
   const [participantIds, setParticipantIds] = useState<number[]>(members.map((m) => m.id));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -46,6 +48,7 @@ export function BetForm({ members, onClose, onSuccess }: BetFormProps) {
           placed_by: placedBy.trim() || null,
           total_cost: Number(totalCost),
           notes: notes.trim() || null,
+          placed_at: placedAt,
           participant_ids: participantIds,
         }),
       });
@@ -134,6 +137,16 @@ export function BetForm({ members, onClose, onSuccess }: BetFormProps) {
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
       />
+
+      <div>
+        <label className="text-sm font-medium text-gray-300 block mb-1">Date placed</label>
+        <input
+          type="date"
+          className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
+          value={placedAt}
+          onChange={(e) => setPlacedAt(e.target.value)}
+        />
+      </div>
 
       {error && <p className="text-sm text-red-500">{error}</p>}
 
