@@ -25,23 +25,23 @@ export function BetCard({ bet, onSettle, onDelete }: BetCardProps) {
   const netPerPerson = perPersonWin - perPerson;
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-gray-900 rounded-2xl shadow-sm border border-gray-700 overflow-hidden">
       <button
         className="w-full text-left px-4 py-3.5 flex items-start gap-3"
         onClick={() => setExpanded((v) => !v)}
       >
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <p className="font-semibold text-gray-900 truncate">{bet.description}</p>
+            <p className="font-semibold text-gray-100 truncate">{bet.description}</p>
             <StatusBadge status={bet.status} />
           </div>
           {bet.placed_by && (
-            <p className="text-xs text-gray-500 mt-0.5">Placed by {bet.placed_by}</p>
+            <p className="text-xs text-gray-400 mt-0.5">Placed by {bet.placed_by}</p>
           )}
           <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-0.5 text-sm">
-            <span className="text-gray-700">
+            <span className="text-gray-300">
               Cost: <strong>{fmt(bet.total_cost)}</strong>
-              {count > 0 && <span className="text-gray-500"> ({fmt(perPerson)}/person)</span>}
+              {count > 0 && <span className="text-gray-400"> ({fmt(perPerson)}/person)</span>}
             </span>
             {bet.status === 'won' && bet.total_winnings > 0 && (
               <span className="text-green-600">
@@ -61,19 +61,19 @@ export function BetCard({ bet, onSettle, onDelete }: BetCardProps) {
             </p>
           )}
         </div>
-        <span className="text-gray-400 shrink-0 mt-0.5">
+        <span className="text-gray-500 shrink-0 mt-0.5">
           {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
         </span>
       </button>
 
       {expanded && (
-        <div className="border-t border-gray-100 px-4 py-3 space-y-3">
+        <div className="border-t border-gray-700 px-4 py-3 space-y-3">
           {bet.participants.length > 0 && (
             <div>
-              <p className="text-xs font-medium text-gray-500 mb-1.5">Participants ({count})</p>
+              <p className="text-xs font-medium text-gray-400 mb-1.5">Participants ({count})</p>
               <div className="flex flex-wrap gap-1.5">
                 {bet.participants.map((p) => (
-                  <span key={p.id} className="bg-indigo-50 text-indigo-700 text-xs px-2 py-0.5 rounded-full">
+                  <span key={p.id} className="bg-indigo-900/50 text-indigo-300 text-xs px-2 py-0.5 rounded-full">
                     {p.name}
                   </span>
                 ))}
@@ -81,9 +81,9 @@ export function BetCard({ bet, onSettle, onDelete }: BetCardProps) {
             </div>
           )}
           {bet.notes && (
-            <p className="text-sm text-gray-600 italic">{bet.notes}</p>
+            <p className="text-sm text-gray-400 italic">{bet.notes}</p>
           )}
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-gray-500">
             {new Date(bet.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
           </p>
           <div className="flex gap-2 pt-1">

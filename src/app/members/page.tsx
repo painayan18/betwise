@@ -25,7 +25,7 @@ export default function MembersPage() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-xl font-bold text-gray-900">Members</h1>
+      <h1 className="text-xl font-bold text-gray-100">Members</h1>
       <AddMemberForm onSuccess={handleSuccess} />
       {isLoading ? <LoadingSpinner /> : (
         <MemberList members={members} onDelete={handleDelete} />

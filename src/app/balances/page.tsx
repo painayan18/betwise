@@ -13,12 +13,12 @@ export default function BalancesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-gray-900 mb-4">Balances</h1>
+        <h1 className="text-xl font-bold text-gray-100 mb-4">Balances</h1>
         <BalanceSummary member_balances={balances?.member_balances ?? []} />
       </div>
 
       <div>
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">
           Who Pays Whom
         </h2>
         <DebtList debts={balances?.debts ?? []} />

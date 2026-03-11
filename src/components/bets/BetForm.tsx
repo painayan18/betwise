@@ -84,11 +84,11 @@ export function BetForm({ members, onClose, onSuccess }: BetFormProps) {
       />
       {members.length > 0 && (
         <div>
-          <label className="text-sm font-medium text-gray-700 block mb-2">
+          <label className="text-sm font-medium text-gray-300 block mb-2">
             Placed by (optional)
           </label>
           <select
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-lg border border-gray-600 px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-900"
             value={placedBy}
             onChange={(e) => setPlacedBy(e.target.value)}
           >
@@ -101,16 +101,16 @@ export function BetForm({ members, onClose, onSuccess }: BetFormProps) {
       )}
 
       <div>
-        <p className="text-sm font-medium text-gray-700 mb-2">
+        <p className="text-sm font-medium text-gray-300 mb-2">
           Participants
           {perPerson > 0 && (
-            <span className="ml-2 font-normal text-gray-500 text-xs">
+            <span className="ml-2 font-normal text-gray-400 text-xs">
               ({count} people · ${perPerson.toFixed(2)}/each)
             </span>
           )}
         </p>
         {members.length === 0 ? (
-          <p className="text-sm text-gray-400">Add members first on the Members tab.</p>
+          <p className="text-sm text-gray-500">Add members first on the Members tab.</p>
         ) : (
           <div className="space-y-1.5 max-h-40 overflow-y-auto">
             {members.map((m) => (
@@ -121,7 +121,7 @@ export function BetForm({ members, onClose, onSuccess }: BetFormProps) {
                   checked={participantIds.includes(m.id)}
                   onChange={() => toggleParticipant(m.id)}
                 />
-                <span className="text-sm text-gray-700">{m.name}</span>
+                <span className="text-sm text-gray-300">{m.name}</span>
               </label>
             ))}
           </div>

@@ -1,9 +1,9 @@
 import type { BetStatus } from '@/lib/types';
 
 const styles: Record<BetStatus, string> = {
-  pending: 'bg-amber-100 text-amber-700',
-  won: 'bg-green-100 text-green-700',
-  lost: 'bg-red-100 text-red-600',
+  pending: 'bg-amber-900/40 text-amber-400',
+  won: 'bg-green-900/40 text-green-400',
+  lost: 'bg-red-900/40 text-red-400',
 };
 
 const labels: Record<BetStatus, string> = {

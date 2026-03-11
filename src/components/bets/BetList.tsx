@@ -27,7 +27,7 @@ export function BetList({ bets, onSettle, onDelete }: BetListProps) {
     <div className="space-y-5">
       {pending.length > 0 && (
         <section>
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Active</h3>
+          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Active</h3>
           <div className="space-y-2">
             {pending.map((bet) => (
               <BetCard key={bet.id} bet={bet} onSettle={onSettle} onDelete={onDelete} />
@@ -37,7 +37,7 @@ export function BetList({ bets, onSettle, onDelete }: BetListProps) {
       )}
       {settled.length > 0 && (
         <section>
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Settled</h3>
+          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Settled</h3>
           <div className="space-y-2">
             {settled.map((bet) => (
               <BetCard key={bet.id} bet={bet} onSettle={onSettle} onDelete={onDelete} />

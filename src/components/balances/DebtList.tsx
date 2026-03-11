@@ -18,15 +18,15 @@ export function DebtList({ debts }: { debts: DebtEntry[] }) {
   return (
     <div className="space-y-2">
       {debts.map((debt, i) => (
-        <div key={i} className="bg-white rounded-xl border border-gray-100 shadow-sm px-4 py-3 flex items-center gap-3">
+        <div key={i} className="bg-gray-900 rounded-xl border border-gray-700 shadow-sm px-4 py-3 flex items-center gap-3">
           <div className="flex-1">
-            <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-200">
               <span>{debt.from.name}</span>
-              <ArrowRight size={14} className="text-gray-400 shrink-0" />
+              <ArrowRight size={14} className="text-gray-500 shrink-0" />
               <span>{debt.to.name}</span>
             </div>
           </div>
-          <span className="text-base font-bold text-gray-900">{fmt(debt.amount)}</span>
+          <span className="text-base font-bold text-gray-100">{fmt(debt.amount)}</span>
         </div>
       ))}
     </div>

@@ -59,15 +59,15 @@ export function SettleBetModal({ bet, onClose, onSuccess }: SettleBetModalProps)
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="bg-gray-50 rounded-xl p-3 text-sm">
-        <p className="font-medium text-gray-800">{bet.description}</p>
-        <p className="text-gray-500 mt-0.5">
+      <div className="bg-gray-800 rounded-xl p-3 text-sm">
+        <p className="font-medium text-gray-200">{bet.description}</p>
+        <p className="text-gray-400 mt-0.5">
           Total cost: {fmt(bet.total_cost)} · {count} participants · {fmt(costPerPerson)}/person
         </p>
       </div>
 
       <div>
-        <p className="text-sm font-medium text-gray-700 mb-2">Outcome</p>
+        <p className="text-sm font-medium text-gray-300 mb-2">Outcome</p>
         <div className="flex gap-2">
           {(['won', 'lost'] as const).map((v) => (
             <button
@@ -77,9 +77,9 @@ export function SettleBetModal({ bet, onClose, onSuccess }: SettleBetModalProps)
               className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-colors border-2 ${
                 outcome === v
                   ? v === 'won'
-                    ? 'border-green-500 bg-green-50 text-green-700'
-                    : 'border-red-400 bg-red-50 text-red-600'
-                  : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300'
+                    ? 'border-green-500 bg-green-900/40 text-green-400'
+                    : 'border-red-500 bg-red-900/20 text-red-400'
+                  : 'border-gray-700 bg-gray-800 text-gray-400 hover:border-gray-600'
               }`}
             >
               {v === 'won' ? '🏆 Won' : '💸 Lost'}
@@ -103,13 +103,13 @@ export function SettleBetModal({ bet, onClose, onSuccess }: SettleBetModalProps)
 
       {/* Live preview */}
       {(outcome === 'lost' || (outcome === 'won' && winnings)) && (
-        <div className={`rounded-xl p-3 text-sm ${netPerPerson >= 0 ? 'bg-green-50' : 'bg-red-50'}`}>
-          <p className="font-medium text-gray-700 mb-1">Per-person summary</p>
+        <div className={`rounded-xl p-3 text-sm ${netPerPerson >= 0 ? 'bg-green-900/20' : 'bg-red-900/20'}`}>
+          <p className="font-medium text-gray-300 mb-1">Per-person summary</p>
           {outcome === 'won' && winnings && (
-            <p className="text-gray-600">Winnings: <strong>{fmt(winPerPerson)}</strong>/person</p>
+            <p className="text-gray-400">Winnings: <strong>{fmt(winPerPerson)}</strong>/person</p>
           )}
-          <p className="text-gray-600">Cost: <strong>-{fmt(costPerPerson)}</strong>/person</p>
-          <p className={`font-semibold mt-1 ${netPerPerson >= 0 ? 'text-green-700' : 'text-red-600'}`}>
+          <p className="text-gray-400">Cost: <strong>-{fmt(costPerPerson)}</strong>/person</p>
+          <p className={`font-semibold mt-1 ${netPerPerson >= 0 ? 'text-green-400' : 'text-red-400'}`}>
             Net: {netPerPerson >= 0 ? '+' : ''}{fmt(netPerPerson)}/person
           </p>
         </div>

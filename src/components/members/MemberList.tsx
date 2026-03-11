@@ -27,11 +27,11 @@ export function MemberList({ members, onDelete }: MemberListProps) {
   return (
     <div className="space-y-2">
       {members.map((m) => (
-        <div key={m.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm px-4 py-3 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm font-semibold shrink-0">
+        <div key={m.id} className="bg-gray-900 rounded-2xl border border-gray-700 shadow-sm px-4 py-3 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-indigo-900/60 text-indigo-400 flex items-center justify-center text-sm font-semibold shrink-0">
             {m.name[0].toUpperCase()}
           </div>
-          <span className="flex-1 font-medium text-gray-800">{m.name}</span>
+          <span className="flex-1 font-medium text-gray-200">{m.name}</span>
           {confirmId === m.id ? (
             <div className="flex gap-1.5">
               <Button variant="danger" size="sm" onClick={() => { onDelete(m.id); setConfirmId(null); }}>
@@ -44,7 +44,7 @@ export function MemberList({ members, onDelete }: MemberListProps) {
           ) : (
             <button
               onClick={() => setConfirmId(m.id)}
-              className="text-gray-300 hover:text-red-400 transition-colors"
+              className="text-gray-600 hover:text-red-400 transition-colors"
               aria-label={`Remove ${m.name}`}
             >
               <Trash2 size={16} />
