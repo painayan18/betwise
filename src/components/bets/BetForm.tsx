@@ -35,6 +35,7 @@ export function BetForm({ members, onClose, onSuccess }: BetFormProps) {
     e.preventDefault();
     if (!description.trim()) { setError('Description is required'); return; }
     if (!totalCost || Number(totalCost) <= 0) { setError('Enter a valid cost'); return; }
+    if (!placedBy) { setError('Select who placed the bet'); return; }
     if (participantIds.length === 0) { setError('Select at least one participant'); return; }
 
     setLoading(true);
@@ -88,7 +89,7 @@ export function BetForm({ members, onClose, onSuccess }: BetFormProps) {
       {members.length > 0 && (
         <div>
           <label className="text-sm font-medium text-gray-300 block mb-2">
-            Placed by (optional)
+            Placed by
           </label>
           <select
             className="w-full rounded-lg border border-gray-600 px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-900"
