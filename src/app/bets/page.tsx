@@ -20,6 +20,8 @@ export default function BetsPage() {
   const [showForm, setShowForm] = useState(false);
   const [settleBet, setSettleBet] = useState<Bet | null>(null);
 
+  function handleUpdate() { mutateBets(); }
+
   async function handleDelete(bet: Bet) {
     await fetch(`/api/bets/${bet.id}`, { method: 'DELETE' });
     mutateBets();
@@ -45,6 +47,7 @@ export default function BetsPage() {
           bets={bets}
           onSettle={setSettleBet}
           onDelete={handleDelete}
+          onUpdate={handleUpdate}
         />
       )}
 
