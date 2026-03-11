@@ -57,4 +57,6 @@ export interface RawBetParticipation {
   status: BetStatus;
   total_winnings: number;
   participant_count: number;
+  placed_by: string | null;
+  is_placer: boolean;
 }

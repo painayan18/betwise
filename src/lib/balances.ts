@@ -4,26 +4,42 @@ function computeMemberBalances(
   rows: RawBetParticipation[],
   allMembers: Member[]
 ): MemberBalance[] {
-  const balanceMap = new Map<number, { staked: number; won: number }>();
+  const balanceMap = new Map<number, { balance: number; staked: number; won: number }>();
   for (const m of allMembers) {
-    balanceMap.set(m.id, { staked: 0, won: 0 });
+    balanceMap.set(m.id, { balance: 0, staked: 0, won: 0 });
   }
 
   for (const row of rows) {
-    const costShare = row.total_cost / row.participant_count;
-    const winShare = row.status === 'won' ? row.total_winnings / row.participant_count : 0;
+    const n = row.participant_count;
+    const costShare = row.total_cost / n;
+    const winShare = row.status === 'won' ? row.total_winnings / n : 0;
     const entry = balanceMap.get(row.member_id);
-    if (entry) {
-      entry.staked += costShare;
-      entry.won += winShare;
+    if (!entry) continue;
+
+    entry.staked += costShare;
+    entry.won += winShare;
+
+    if (row.placed_by && row.is_placer) {
+      // Placer paid full cost and received full winnings.
+      // They are owed cost shares from all others, and owe win shares to all others.
+      const othersCount = n - 1;
+      entry.balance += costShare * othersCount;  // collected from others
+      entry.balance -= winShare * othersCount;   // distributed to others
+    } else if (row.placed_by && !row.is_placer) {
+      // Non-placer: owes their cost share to placer, is owed their win share back.
+      entry.balance -= costShare;
+      entry.balance += winShare;
+    } else {
+      // No placer set: assume everyone manages their own stake.
+      entry.balance += winShare - costShare;
     }
   }
 
   return allMembers.map((member) => {
-    const { staked, won } = balanceMap.get(member.id)!;
+    const { balance, staked, won } = balanceMap.get(member.id)!;
     return {
       member,
-      net_balance: won - staked,
+      net_balance: balance,
       total_staked: staked,
       total_won: won,
     };

@@ -155,6 +155,8 @@ export async function getRawBalanceData(): Promise<RawBetParticipation[]> {
       b.total_cost::float AS total_cost,
       b.status,
       b.total_winnings::float AS total_winnings,
+      b.placed_by,
+      (b.placed_by IS NOT NULL AND b.placed_by = m.name) AS is_placer,
       COUNT(*) OVER (PARTITION BY b.id)::int AS participant_count
     FROM bet_participants bp
     JOIN members m ON bp.member_id = m.id
