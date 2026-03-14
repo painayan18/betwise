@@ -18,21 +18,7 @@ function computeMemberBalances(
 
     entry.staked += costShare;
     entry.won += winShare;
-
-    if (row.placed_by && row.is_placer) {
-      // Placer paid full cost and received full winnings.
-      // They are owed cost shares from all others, and owe win shares to all others.
-      const othersCount = n - 1;
-      entry.balance += costShare * othersCount;  // collected from others
-      entry.balance -= winShare * othersCount;   // distributed to others
-    } else if (row.placed_by && !row.is_placer) {
-      // Non-placer: owes their cost share to placer, is owed their win share back.
-      entry.balance -= costShare;
-      entry.balance += winShare;
-    } else {
-      // No placer set: assume everyone manages their own stake.
-      entry.balance += winShare - costShare;
-    }
+    entry.balance += winShare - costShare;
   }
 
   return allMembers.map((member) => {
