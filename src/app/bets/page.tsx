@@ -19,11 +19,14 @@ export default function BetsPage() {
   const { mutateBalances } = useBalances();
   const [showForm, setShowForm] = useState(false);
   const [settleBet, setSettleBet] = useState<Bet | null>(null);
+  const [deleteBet, setDeleteBet] = useState<Bet | null>(null);
 
   function handleUpdate() { mutateBets(); }
 
-  async function handleDelete(bet: Bet) {
-    await fetch(`/api/bets/${bet.id}`, { method: 'DELETE' });
+  async function confirmDelete() {
+    if (!deleteBet) return;
+    await fetch(`/api/bets/${deleteBet.id}`, { method: 'DELETE' });
+    setDeleteBet(null);
     mutateBets();
     mutateBalances();
   }
@@ -46,7 +49,7 @@ export default function BetsPage() {
         <BetList
           bets={bets}
           onSettle={setSettleBet}
-          onDelete={handleDelete}
+          onDelete={setDeleteBet}
           onUpdate={handleUpdate}
         />
       )}
@@ -68,6 +71,18 @@ export default function BetsPage() {
             onClose={() => setSettleBet(null)}
             onSuccess={handleSuccess}
           />
+        </Modal>
+      )}
+
+      {deleteBet && (
+        <Modal title="Delete Bet" onClose={() => setDeleteBet(null)}>
+          <p className="text-gray-300 mb-6">
+            Delete <span className="font-semibold text-gray-100">&ldquo;{deleteBet.description}&rdquo;</span>? This cannot be undone.
+          </p>
+          <div className="flex gap-3 justify-end">
+            <Button variant="secondary" onClick={() => setDeleteBet(null)}>Cancel</Button>
+            <Button variant="danger" onClick={confirmDelete}>Delete</Button>
+          </div>
         </Modal>
       )}
     </div>
