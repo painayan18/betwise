@@ -6,7 +6,7 @@ import { Ticket, BarChart2, Users } from 'lucide-react';
 
 const tabs = [
   { href: '/bets', label: 'Bets', icon: Ticket },
-  { href: '/balances', label: 'Balances', icon: BarChart2 },
+  { href: '/balances', label: 'Profits', icon: BarChart2 },
   { href: '/members', label: 'Members', icon: Users },
 ];
 
