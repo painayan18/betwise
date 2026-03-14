@@ -166,6 +166,7 @@ export async function getRawBalanceData(): Promise<RawBetParticipation[]> {
     FROM bet_participants bp
     JOIN members m ON bp.member_id = m.id
     JOIN bets b ON bp.bet_id = b.id
+    WHERE b.status IN ('won', 'lost')
   `;
   return rows as RawBetParticipation[];
 }
