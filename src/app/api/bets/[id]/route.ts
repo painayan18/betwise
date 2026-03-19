@@ -35,6 +35,7 @@ export async function PATCH(
         description: body.description,
         placed_by: body.placed_by,
         total_cost: body.total_cost !== undefined ? Number(body.total_cost) : undefined,
+        total_winnings: body.total_winnings !== undefined ? Number(body.total_winnings) : undefined,
         notes: body.notes,
         placed_at: body.placed_at,
       });

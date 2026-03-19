@@ -27,6 +27,9 @@ export function BetCard({ bet, members, onSettle, onDelete, onUpdate }: BetCardP
   const [participantIds, setParticipantIds] = useState<number[]>(bet.participants.map((p) => p.id));
   const [notes, setNotes] = useState(bet.notes ?? '');
   const [placedAt, setPlacedAt] = useState(bet.placed_at ?? '');
+  // For settled bets: won → total_winnings; lost → amount_lost (total_cost - total_winnings)
+  const [totalWinnings, setTotalWinnings] = useState(bet.status === 'won' ? String(bet.total_winnings) : '');
+  const [amountLost, setAmountLost] = useState(bet.status === 'lost' ? String(bet.total_cost - bet.total_winnings) : '');
   const [saving, setSaving] = useState(false);
 
   function formatDate(d: string) {
@@ -49,15 +52,22 @@ export function BetCard({ bet, members, onSettle, onDelete, onUpdate }: BetCardP
     if (!totalCost || Number(totalCost) <= 0) return;
     if (participantIds.length === 0) return;
     setSaving(true);
+    const cost = Number(totalCost);
+    const settled_winnings = bet.status === 'won'
+      ? (totalWinnings ? Number(totalWinnings) : undefined)
+      : bet.status === 'lost'
+        ? (amountLost ? cost - Number(amountLost) : undefined)
+        : undefined;
     await fetch(`/api/bets/${bet.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         description: description.trim(),
-        total_cost: Number(totalCost),
+        total_cost: cost,
         placed_by: placedBy || null,
         notes: notes.trim() || null,
         placed_at: placedAt || null,
+        ...(settled_winnings !== undefined && { total_winnings: settled_winnings }),
       }),
     });
     await fetch(`/api/bets/${bet.id}/participants`, {
@@ -77,6 +87,8 @@ export function BetCard({ bet, members, onSettle, onDelete, onUpdate }: BetCardP
     setParticipantIds(bet.participants.map((p) => p.id));
     setNotes(bet.notes ?? '');
     setPlacedAt(bet.placed_at ?? '');
+    setTotalWinnings(bet.status === 'won' ? String(bet.total_winnings) : '');
+    setAmountLost(bet.status === 'lost' ? String(bet.total_cost - bet.total_winnings) : '');
     setEditing(false);
   }
 
@@ -151,6 +163,28 @@ export function BetCard({ bet, members, onSettle, onDelete, onUpdate }: BetCardP
                 onChange={(e) => setTotalCost(e.target.value)}
                 placeholder="Total cost ($)"
               />
+              {bet.status === 'won' && (
+                <input
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
+                  value={totalWinnings}
+                  onChange={(e) => setTotalWinnings(e.target.value)}
+                  placeholder="Total winnings ($)"
+                />
+              )}
+              {bet.status === 'lost' && (
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
+                  value={amountLost}
+                  onChange={(e) => setAmountLost(e.target.value)}
+                  placeholder="Amount lost ($)"
+                />
+              )}
               {members.length > 0 && (
                 <select
                   className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
