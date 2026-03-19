@@ -147,55 +147,70 @@ export function BetCard({ bet, members, onSettle, onDelete, onUpdate }: BetCardP
         <div className="border-t border-gray-700 px-4 py-3 space-y-3">
           {editing ? (
             <div className="space-y-3">
-              <input
-                className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Description"
-                autoFocus
-              />
-              <input
-                type="number"
-                min="0.01"
-                step="0.01"
-                className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
-                value={totalCost}
-                onChange={(e) => setTotalCost(e.target.value)}
-                placeholder="Total cost ($)"
-              />
-              {bet.status === 'won' && (
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Description</label>
+                <input
+                  className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="e.g. Gas prices rise by Q3"
+                  autoFocus
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Total cost ($)</label>
                 <input
                   type="number"
                   min="0.01"
                   step="0.01"
                   className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
-                  value={totalWinnings}
-                  onChange={(e) => setTotalWinnings(e.target.value)}
-                  placeholder="Total winnings ($)"
+                  value={totalCost}
+                  onChange={(e) => setTotalCost(e.target.value)}
+                  placeholder="0.00"
                 />
+              </div>
+              {bet.status === 'won' && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-400 mb-1">Total winnings ($)</label>
+                  <input
+                    type="number"
+                    min="0.01"
+                    step="0.01"
+                    className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
+                    value={totalWinnings}
+                    onChange={(e) => setTotalWinnings(e.target.value)}
+                    placeholder="0.00"
+                  />
+                </div>
               )}
               {bet.status === 'lost' && (
-                <input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
-                  value={amountLost}
-                  onChange={(e) => setAmountLost(e.target.value)}
-                  placeholder="Amount lost ($)"
-                />
+                <div>
+                  <label className="block text-xs font-medium text-gray-400 mb-1">Amount lost ($)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
+                    value={amountLost}
+                    onChange={(e) => setAmountLost(e.target.value)}
+                    placeholder="0.00"
+                  />
+                </div>
               )}
               {members.length > 0 && (
-                <select
-                  className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
-                  value={placedBy}
-                  onChange={(e) => setPlacedBy(e.target.value)}
-                >
-                  <option value="">— Placed by (optional) —</option>
-                  {members.map((m) => (
-                    <option key={m.id} value={m.name}>{m.name}</option>
-                  ))}
-                </select>
+                <div>
+                  <label className="block text-xs font-medium text-gray-400 mb-1">Placed by</label>
+                  <select
+                    className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
+                    value={placedBy}
+                    onChange={(e) => setPlacedBy(e.target.value)}
+                  >
+                    <option value="">— optional —</option>
+                    {members.map((m) => (
+                      <option key={m.id} value={m.name}>{m.name}</option>
+                    ))}
+                  </select>
+                </div>
               )}
               <div>
                 <p className="text-xs font-medium text-gray-400 mb-1.5">
@@ -220,18 +235,24 @@ export function BetCard({ bet, members, onSettle, onDelete, onUpdate }: BetCardP
                   ))}
                 </div>
               </div>
-              <input
-                className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Notes (optional)"
-              />
-              <input
-                type="date"
-                className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
-                value={placedAt}
-                onChange={(e) => setPlacedAt(e.target.value)}
-              />
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Notes (optional)</label>
+                <input
+                  className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Any additional details…"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Date placed</label>
+                <input
+                  type="date"
+                  className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-gray-100 outline-none focus:border-indigo-400"
+                  value={placedAt}
+                  onChange={(e) => setPlacedAt(e.target.value)}
+                />
+              </div>
               <div className="flex gap-2 pt-1">
                 <Button size="sm" onClick={handleSave} disabled={saving || !description.trim() || participantIds.length === 0}>
                   <Check size={14} /> {saving ? 'Saving…' : 'Save'}
