@@ -105,7 +105,7 @@ export async function createBet(data: CreateBetRequest): Promise<Bet> {
 
 export async function updateBet(
   id: number,
-  data: Partial<{ description: string; placed_by: string | null; notes: string | null; placed_at: string | null }>
+  data: Partial<{ description: string; placed_by: string | null; total_cost: number; notes: string | null; placed_at: string | null }>
 ): Promise<Bet> {
   const sql = getDb();
   if (data.description !== undefined) {
@@ -113,6 +113,9 @@ export async function updateBet(
   }
   if ('placed_by' in data) {
     await sql`UPDATE bets SET placed_by = ${data.placed_by ?? null} WHERE id = ${id}`;
+  }
+  if (data.total_cost !== undefined) {
+    await sql`UPDATE bets SET total_cost = ${data.total_cost} WHERE id = ${id}`;
   }
   if ('notes' in data) {
     await sql`UPDATE bets SET notes = ${data.notes ?? null} WHERE id = ${id}`;

@@ -48,6 +48,7 @@ export default function BetsPage() {
       {isLoading ? <LoadingSpinner /> : (
         <BetList
           bets={bets}
+          members={members}
           onSettle={setSettleBet}
           onDelete={setDeleteBet}
           onUpdate={handleUpdate}
