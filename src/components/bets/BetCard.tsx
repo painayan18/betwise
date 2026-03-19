@@ -113,15 +113,16 @@ export function BetCard({ bet, members, onSettle, onDelete, onUpdate }: BetCardP
                 {count > 0 && <span> ({fmt(perPersonWin)}/person)</span>}
               </span>
             )}
+            {bet.status === 'lost' && bet.total_winnings > 0 && (
+              <span className="text-gray-400">
+                Returned: <strong>{fmt(bet.total_winnings)}</strong>
+                {count > 0 && <span> ({fmt(perPersonWin)}/person)</span>}
+              </span>
+            )}
           </div>
-          {bet.status === 'won' && netPerPerson !== 0 && (
+          {(bet.status === 'won' || bet.status === 'lost') && (
             <p className={`text-xs font-medium mt-1 ${netPerPerson >= 0 ? 'text-green-600' : 'text-red-500'}`}>
               Net: {netPerPerson >= 0 ? '+' : ''}{fmt(netPerPerson)}/person
-            </p>
-          )}
-          {bet.status === 'lost' && (
-            <p className="text-xs font-medium mt-1 text-red-500">
-              Net: -{fmt(perPerson)}/person
             </p>
           )}
         </div>

@@ -11,7 +11,7 @@ function computeMemberBalances(
   for (const row of rows) {
     const n = row.participant_count;
     const costShare = row.total_cost / n;
-    const winShare = row.status === 'won' ? row.total_winnings / n : 0;
+    const winShare = row.total_winnings / n;
     const entry = map.get(row.member_id);
     if (!entry) continue;
     entry.staked += costShare;
@@ -41,7 +41,7 @@ function computeDebtBalances(
 
     const n = row.participant_count;
     const costShare = row.total_cost / n;
-    const winShare = row.status === 'won' ? row.total_winnings / n : 0;
+    const winShare = row.total_winnings / n;
     const cur = debtMap.get(row.member_id) ?? 0;
 
     if (row.is_placer) {

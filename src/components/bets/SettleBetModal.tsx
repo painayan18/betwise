@@ -18,13 +18,24 @@ function fmt(n: number) {
 export function SettleBetModal({ bet, onClose, onSuccess }: SettleBetModalProps) {
   const [outcome, setOutcome] = useState<'won' | 'lost'>('won');
   const [winnings, setWinnings] = useState('');
+  const [amountLost, setAmountLost] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const count = bet.participants.length || 1;
   const costPerPerson = bet.total_cost / count;
+
+  // For losses: total_winnings = total_cost - amountLost (the amount returned)
+  const lossValue = amountLost ? Math.min(Number(amountLost), bet.total_cost) : bet.total_cost;
+  const returnedOnLoss = bet.total_cost - lossValue;
+  const returnedPerPerson = returnedOnLoss / count;
+
   const winPerPerson = outcome === 'won' && winnings ? Number(winnings) / count : 0;
-  const netPerPerson = winPerPerson - costPerPerson;
+  const netPerPerson = outcome === 'won'
+    ? winPerPerson - costPerPerson
+    : returnedPerPerson - costPerPerson;
+
+  const showPreview = outcome === 'lost' || (outcome === 'won' && !!winnings);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -32,16 +43,20 @@ export function SettleBetModal({ bet, onClose, onSuccess }: SettleBetModalProps)
       setError('Enter total winnings amount');
       return;
     }
+    if (outcome === 'lost' && (!amountLost || Number(amountLost) <= 0)) {
+      setError('Enter amount lost');
+      return;
+    }
     setLoading(true);
     setError('');
     try {
+      const total_winnings = outcome === 'won'
+        ? Number(winnings)
+        : returnedOnLoss;
       const res = await fetch(`/api/bets/${bet.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          status: outcome,
-          total_winnings: outcome === 'won' ? Number(winnings) : 0,
-        }),
+        body: JSON.stringify({ status: outcome, total_winnings }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -101,12 +116,27 @@ export function SettleBetModal({ bet, onClose, onSuccess }: SettleBetModalProps)
         />
       )}
 
-      {/* Live preview */}
-      {(outcome === 'lost' || (outcome === 'won' && winnings)) && (
+      {outcome === 'lost' && (
+        <Input
+          label="Amount lost ($)"
+          type="number"
+          min="0.01"
+          step="0.01"
+          placeholder={bet.total_cost.toFixed(2)}
+          value={amountLost}
+          onChange={(e) => setAmountLost(e.target.value)}
+          required
+        />
+      )}
+
+      {showPreview && (
         <div className={`rounded-xl p-3 text-sm ${netPerPerson >= 0 ? 'bg-green-900/20' : 'bg-red-900/20'}`}>
           <p className="font-medium text-gray-300 mb-1">Per-person summary</p>
           {outcome === 'won' && winnings && (
             <p className="text-gray-400">Winnings: <strong>{fmt(winPerPerson)}</strong>/person</p>
+          )}
+          {outcome === 'lost' && amountLost && returnedOnLoss > 0 && (
+            <p className="text-gray-400">Returned: <strong>{fmt(returnedPerPerson)}</strong>/person</p>
           )}
           <p className="text-gray-400">Cost: <strong>-{fmt(costPerPerson)}</strong>/person</p>
           <p className={`font-semibold mt-1 ${netPerPerson >= 0 ? 'text-green-400' : 'text-red-400'}`}>

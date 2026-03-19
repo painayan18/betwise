@@ -27,7 +27,7 @@ export async function PATCH(
     let bet;
     if (body.status === 'won' || body.status === 'lost') {
       // Settlement update
-      const total_winnings = body.status === 'won' ? Number(body.total_winnings ?? 0) : 0;
+      const total_winnings = Number(body.total_winnings ?? 0);
       bet = await settleBet(Number(id), { status: body.status, total_winnings });
     } else {
       // Metadata update

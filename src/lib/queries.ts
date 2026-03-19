@@ -128,7 +128,7 @@ export async function updateBet(
 
 export async function settleBet(id: number, data: SettleBetRequest): Promise<Bet> {
   const sql = getDb();
-  const winnings = data.status === 'won' ? data.total_winnings : 0;
+  const winnings = data.total_winnings ?? 0;
   await sql`
     UPDATE bets
     SET status = ${data.status}, total_winnings = ${winnings}, settled_at = NOW()
